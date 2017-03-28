@@ -1,18 +1,38 @@
-#include <unistd.h>
 #include <stdio.h>
+#include <stdlib.h>
+#include <dirent.h>
+#include <err.h>
 #include <sys/stat.h>
-#include <sys/types.h>
- 
-int main(int argc, char **argv)
+#include <string.h>
+
+int main (int argc, char **argv)
 {
-    if(argc != 2)    
-        return 1;
- 
+    DIR *midir;
+    struct dirent* info_archivo;
     struct stat fileStat;
-    if(stat(argv[1],&fileStat) < 0)    
-        return 1;
- 
-    printf("Information for %s\n",argv[1]);
+    char fullpath[256];
+
+    if (argc != 2)
+    {
+        perror("Please supply a folder name\n");
+        exit(-1);
+    }
+
+    if ((midir=opendir(argv[1])) == NULL)
+    {
+        perror("Error in opendir");
+        exit(-1);
+    }
+
+    while ((info_archivo = readdir(midir)) != 0)
+    {
+        printf ("%s ", info_archivo->d_name);
+        strcpy (fullpath, argv[1]);
+        strcat (fullpath, "/");
+        strcat (fullpath, info_archivo->d_name);
+        if (!stat(fullpath, &fileStat))
+        {
+               printf("Information for %s\n",argv[1]);
     printf("---------------------------\n");
     printf("File Size: \t\t%d bytes\n",fileStat.st_size);
     printf("Number of Links: \t%d\n",fileStat.st_nlink);
@@ -24,15 +44,19 @@ int main(int argc, char **argv)
     printf( (fileStat.st_mode & S_IWUSR) ? "w" : "-");
     printf( (fileStat.st_mode & S_IXUSR) ? "x" : "-");
     printf( (fileStat.st_mode & S_IRGRP) ? "r" : "-");
-    printf( (fileStat.st_mode & S_IWGRP) ? "w" : "-");
-    printf( (fileStat.st_mode & S_IXGRP) ? "x" : "-");
     printf( (fileStat.st_mode & S_IROTH) ? "r" : "-");
     printf( (fileStat.st_mode & S_IWOTH) ? "w" : "-");
     printf( (fileStat.st_mode & S_IXOTH) ? "x" : "-");
-    printf("\n\n");
- 
-    printf("The file %s a symbolic link\n", (S_ISLNK(fileStat.st_mode)) ? "is" : "is not");
- 
-    return 0;
+        printf("\n\n");
+        } else
+        {
+            perror("Error in stat");
+        }
+        printf("\n");
+    }
+    closedir(midir);
 }
+
+
+
 

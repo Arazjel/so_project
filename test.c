@@ -20,7 +20,7 @@ int main(int argc, char* argv[]){
 		fileName = dp->d_name;
         	printf("%s\t",fileName);
 
-		if (stat(file_name, &sb) == 0 && S_ISDIR(sb.st_mode)){
+		if (stat(fileName, &sb) == 0 && S_ISDIR(sb.st_mode)){
         		printf("Folder");
     		}else {
         		printf("NOT Folder");

@@ -8,7 +8,12 @@ STANDARD_TIME jest ustawiony definem na 300sekund == 5 minut
 #include "sleepMode.h"
 
 void waitFor (unsigned int secs) {
+int signal;
 unsigned int  retTime = time(0) + secs;
-    while (time(0) < retTime);
+    while (time(0) < retTime)
+        {
+                if (signal==SIGUSR1) break;
+        }
 }
+
 

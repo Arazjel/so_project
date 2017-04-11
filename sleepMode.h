@@ -8,6 +8,6 @@
 #include <time.h>
 #include <signal.h>
 
-void waitFor();
+void waitFor(unsigned int);
 
 #endif

@@ -11,7 +11,7 @@ int main(int argc, char* argv[]){
     	DIR * dir1;
     	DIR * dir2;
     	dir1 = opendir(argv[1]);
-    	//dir2 = opendir(argv[2]);
+
     	struct dirent * direntFirst;
     	struct dirent * direntSecond;
     	char * firstFile;
@@ -43,6 +43,20 @@ int main(int argc, char* argv[]){
         		    printf("---------------------------\n");
         		    printf("Modyfication: \t\t%ld\n",fileStat1.st_mtime);
         		    printf("\n\n");
+
+        		    dir2 = opendir(argv[1]);
+        		    while ((direntSecond=readdir(dir2)) != NULL) {
+        		    	if ( !strcmp(direntSecond->d_name, ".") || !strcmp(direntSecond->d_name, "..") ){
+        		               	 // do nothing (straight logic)
+        		        } else {
+
+        		        	secondFile = direntSecond->d_name;
+        		        	if(strcmp(firstFile, secondFile) == 0){
+        		        		printf("%s\n", secondFile);
+        		            }
+        		        }
+        		    }
+
         		}
 
 		}

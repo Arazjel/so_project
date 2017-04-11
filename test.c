@@ -8,36 +8,40 @@
 #include <time.h>
 
 int main(int argc, char* argv[]){
-    	DIR * dir;
-    	struct dirent * dp;
-    	char * fileName;
-    	dir = opendir(argv[1]);
+    	DIR * dir1;
+    	DIR * dir2;
+    	dir1 = opendir(argv[1]);
+    	//dir2 = opendir(argv[2]);
+    	struct dirent * direntFirst;
+    	struct dirent * direntSecond;
+    	char * firstFile;
+    	char * secondFile;
 
-    	struct stat fileStat;
-    	char fullpath[256];
+
+    	struct stat fileStat1;
 
 
     	struct stat sb = {0};
 
-    	while ((dp=readdir(dir)) != NULL) {
-        	if ( !strcmp(dp->d_name, ".") || !strcmp(dp->d_name, "..") )
+    	while ((direntFirst=readdir(dir1)) != NULL) {
+        	if ( !strcmp(direntFirst->d_name, ".") || !strcmp(direntFirst->d_name, "..") )
         	{
            	 // do nothing (straight logic)
         	} else {
-        		fileName = dp->d_name;
-        	printf("%s\t",fileName);
+        		firstFile = direntFirst->d_name;
+        	printf("%s\t",firstFile);
 
-		if(stat(fileName, &sb) == 0 && S_ISDIR(sb.st_mode)){
+		if(stat(firstFile, &sb) == 0 && S_ISDIR(sb.st_mode)){
         		printf("Folder\n\n");
     	}else {
         		printf("NOT Folder\n");
-        		if (!stat(fileName, &fileStat)){
+        		if (!stat(firstFile, &fileStat1)){
         			/*
         							tu dać funkcjonalnosc jezeli
         							obiekt jest plikiem
         			*/
         		    printf("---------------------------\n");
-        		    printf("Modyfication: \t\t%ld\n",fileStat.st_mtime);
+        		    printf("Modyfication: \t\t%ld\n",fileStat1.st_mtime);
         		    printf("\n\n");
         		}
 
@@ -45,6 +49,6 @@ int main(int argc, char* argv[]){
 		printf("\n");
         }
     }
-    closedir(dir);
+    closedir(dir1);
     return 0;
 }

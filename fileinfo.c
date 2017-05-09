@@ -1,12 +1,6 @@
-#include <stdio.h>
-#include <stdlib.h>
-#include <dirent.h>
-#include <err.h>
-#include <sys/stat.h>
-#include <string.h>
-#include <time.h>
+#include "fileinfo.h"
 
-int main (int argc, char **argv)
+void fileInfo (int argc_, char **argv_)
 {
     DIR *midir;
     struct dirent* info_archivo;
@@ -16,13 +10,13 @@ int main (int argc, char **argv)
     FILE *f; f = fopen("demon.log", "a+");
     if (f == NULL) printf("Wystapil blad przy tworzeniu loga"); 
 
-    if (argc != 2)
+    if (argc_ != 2)
     {
         perror("Please supply a folder name\n");
         exit(-1);
     }
 
-    if ((midir=opendir(argv[1])) == NULL)
+    if ((midir=opendir(argv_[1])) == NULL)
     {
         perror("Error in opendir");
         exit(-1);
@@ -36,12 +30,12 @@ int main (int argc, char **argv)
     while ((info_archivo = readdir(midir)) != 0)
     {
         fprintf (f,"FILENAME: %s \n", info_archivo->d_name);
-        strcpy (fullpath, argv[1]);
+        strcpy (fullpath, argv_[1]);
         strcat (fullpath, "/");
         strcat (fullpath, info_archivo->d_name);
         if (!stat(fullpath, &fileStat))
         {
-               fprintf(f,"Information for folder %s	",argv[1]);fprintf(f,ctime(&currentTime),"\n");
+               fprintf(f,"Information for folder %s	",argv_[1]);fprintf(f,ctime(&currentTime),"\n");
     fprintf(f,"---------------------------\n");
     fprintf(f,"File Size: \t\t%d bytes\n",fileStat.st_size);
     fprintf(f,"Number of Links: \t%d\n",fileStat.st_nlink);
@@ -68,4 +62,3 @@ int main (int argc, char **argv)
     closedir(midir);
     fclose(f);
 }
-

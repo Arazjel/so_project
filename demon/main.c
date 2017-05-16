@@ -28,6 +28,9 @@ int main(int argc,char** argv)
 
 isDirectory(argv); //jesli podane foldery nie istnieja program wychodzi z komunikatem bledu
 
+if (argc==3) waitFor(secs=(uintptr_t) argv[2]);
+	else waitFor(STANDARD_TIME); //odczekanie podanej wartosci lub 5 minut
+
 
 
 return 0;

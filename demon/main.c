@@ -41,21 +41,36 @@ if (argc==3) waitFor(secs=(uintptr_t) argv[2]);
 
 struct dirent *first;
 struct dirent *second;
+/*                      WAZNE!!!
+
+W WARUNKACH TRZEBA DODAC SPRAWDZANIE DATY MODYFIKACJI. JEZELI DEMON RUSZAL DANY PLIK WCZESNIEJ
+I NIE JEST ZMODYFIKOWANY TO TRZEBA GO IGNOROWAC(!!)
+
+*/
 
 while ((first = readdir(argv[1])) != NULL)
 {   
     char *nameFirst=first->d_name;
     struct stat attrFirst;
     stat(nameFirst,&attrFirst);
-    time_t lastModificationDate=ctime(&attrFirst.st_mtime);
+    time_t lastModificationDateFirst=ctime(&attrFirst.st_mtime);
 
     while ((second = readdir(argv[2])) != NULL)
     {
     char *nameSecond=second->d_name;
     struct stat attrSecond;
     stat(nameSecond,&attrSecond);
-    time_t lastModificationDate=ctime(&attrSecond.st_mtime);
+    time_t lastModificationDateSecond=ctime(&attrSecond.st_mtime);
+        if ((nameFirst==nameSecond)&&((difftime(lastModificationDateFirst, lastModificationDateSecond))>0 ))
+        {
+                //nazwy sie NIE roznia i plik jest nowszy, trzeba kopiowac plik z pierwszego do drugiego
+        }
+    
+
     }
+//w tym miejscu przeszukalo caly drugi katalog w poszukiwaniu pliku z pierwszego i nie znalazlo
+//trzeba tutaj przekiopowac plik z pierwszego do drugiego
+
 }
 
 

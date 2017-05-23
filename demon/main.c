@@ -43,10 +43,18 @@ struct dirent *first;
 struct dirent *second;
 
 while ((first = readdir(argv[1])) != NULL)
-{
+{   
+    char *nameFirst=first->d_name;
+    struct stat attrFirst;
+    stat(nameFirst,&attrFirst);
+    time_t lastModificationDate=ctime(&attrFirst.st_mtime);
+
     while ((second = readdir(argv[2])) != NULL)
     {
-        
+    char *nameSecond=second->d_name;
+    struct stat attrSecond;
+    stat(nameSecond,&attrSecond);
+    time_t lastModificationDate=ctime(&attrSecond.st_mtime);
     }
 }
 

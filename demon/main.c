@@ -1,6 +1,8 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <sys/stat.h>
+#include <sys/types.h>
+#include <dirent.h>
 #include <errno.h>
 #include "sleepMode.h"
 #include "fileinfo.h"
@@ -22,14 +24,31 @@ struct stat sb = {0};
     }
 
 }
+int isRegularFile(const char *path)
+{
+    struct stat path_stat;
+    stat(path, &path_stat);
+    return S_ISREG(path_stat.st_mode);
+}
 
 int main(int argc,char** argv)
 {
 
 isDirectory(argv); //jesli podane foldery nie istnieja program wychodzi z komunikatem bledu
-
+int secs;
 if (argc==3) waitFor(secs=(uintptr_t) argv[2]);
 	else waitFor(STANDARD_TIME); //odczekanie podanej wartosci lub 5 minut
+
+struct dirent *first;
+struct dirent *second;
+
+while ((first = readdir(argv[1])) != NULL)
+{
+    while ((second = readdir(argv[2])) != NULL)
+    {
+        
+    }
+}
 
 
 
